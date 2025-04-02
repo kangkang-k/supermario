@@ -1,0 +1,4 @@
+.venv/
+logs/
+best_model/
+ppo_mario.zip
