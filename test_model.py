@@ -1,22 +1,28 @@
 import gym
-from numpy import shape
-from stable_baselines3 import PPO
-from nes_py.wrappers import JoypadSpace
 import gym_super_mario_bros
-from gym_super_mario_bros.actions import SIMPLE_MOVEMENT
-from gym.wrappers import GrayScaleObservation
+from nes_py.wrappers import JoypadSpace
+from stable_baselines3 import PPO
+from stable_baselines3.common.vec_env import DummyVecEnv, VecFrameStack
+from test_obs import make_env
 
-env = gym_super_mario_bros.make('SuperMarioBros-v2')
-env = JoypadSpace(env, SIMPLE_MOVEMENT)
-env = GrayScaleObservation(env,keep_dim=True)
 
-model = PPO.load('ppo_mario.zip', env=env)
+def main():
+    env = make_env()
+    env = DummyVecEnv([lambda: env])
+    env = VecFrameStack(env, 4, channels_order='last')
+    model = PPO.load('ppo_mario', weights_only=True)
+    obs = env.reset()
+    done = False
+    steps = 0
+    max_steps = 1000
+    while not done and steps < max_steps:
+        action, _states = model.predict(obs)
+        obs, rewards, done, info = env.step(action)
+        print(f"Action: {action}, Reward: {rewards}, Done: {done}, Info: {info}")
+        env.render()
+        steps += 1
+    env.close()
 
-obs = env.reset()
-for i in range(10000):
-    obs = obs.copy()
-    action, _station = model.predict(obs, deterministic=True)
-    obs, reward, done, info = env.step(action)
-    env.render()
-    if done:
-        obs = env.reset()
+
+if __name__ == '__main__':
+    main()
