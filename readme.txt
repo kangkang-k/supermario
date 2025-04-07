@@ -1,6 +1,6 @@
 my_SkipFrameWrappers   >   自定义的 Gym 环境包装器,有被test_obs实例化
 test_obs.py            >   用来创建模型的虚拟环境，以下两个文件有用到
-train_model.py         >   训练马里奥模型的代码
+train_model.py         >   训练马里奥模型的代码，执行结束后，会获得两个模型，一个ppo_mario，一个best_model，其中，best_model是训练过程中表现最好的模型，ppo_mario是每一轮获得的模型，
 test_model.py          >   测试马里奥模型的代码
 
 

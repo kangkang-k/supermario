@@ -10,7 +10,7 @@ def main():
     env = make_env()
     env = DummyVecEnv([lambda: env])
     env = VecFrameStack(env, 4, channels_order='last')
-    model = PPO.load('ppo_mario', weights_only=True)
+    model = PPO.load('ppo_mario', weights_only=True) #修改这里的路径就可以切换模型进行测试
     obs = env.reset()
     done = False
     steps = 0
